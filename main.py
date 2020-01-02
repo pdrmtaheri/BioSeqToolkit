@@ -11,48 +11,23 @@ class Application(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
 
-        self.create_pattern_finder_button()
-        self.create_longest_palindrome_finder_button()
-        self.create_longest_common_substring_finder_button()
-        self.create_longest_repeptivie_substring_finder_button()
+        pf_btn = tk.Button(master=self, text='Pattern Finder',
+                           command=lambda: PatternFinder(tk.Toplevel(master=self)))
+        pf_btn.pack()
+
+        lrsf_btn = tk.Button(master=self, text='Longest Repetitive Substring Finder',
+                             command=lambda: LongestRepetitiveSubstringFinder(tk.Toplevel(master=self)))
+        lrsf_btn.pack()
+
+        lcsf_btn = tk.Button(master=self, text='Longest Common Substring Finder',
+                             command=lambda: LongestCommonSubstringFinder(tk.Toplevel(master=self)))
+        lcsf_btn.pack()
+
+        lpf_btn = tk.Button(master=self, text='Longest Palindrome Finder',
+                            command=lambda: LongestPalindromeFinder(tk.Toplevel(master=self)))
+        lpf_btn.pack()
 
         self.pack()
-
-    def create_pattern_finder_button(self):
-        btn = tk.Button(self)
-        btn['text'] = 'Pattern Finder'
-        btn['command'] = lambda: PatternFinder(
-            tk.Toplevel(master=self))
-        btn.pack()
-
-        return btn
-
-    def create_longest_repeptivie_substring_finder_button(self):
-        btn = tk.Button(self)
-        btn['text'] = 'Longest Repetitive Substring Finder'
-        btn['command'] = lambda: LongestRepetitiveSubstringFinder(
-            tk.Toplevel(master=self))
-        btn.pack()
-
-        return btn
-
-    def create_longest_common_substring_finder_button(self):
-        btn = tk.Button(self)
-        btn['text'] = 'Longest Common Substring Finder'
-        btn['command'] = lambda: LongestCommonSubstringFinder(
-            tk.Toplevel(master=self))
-        btn.pack()
-
-        return btn
-
-    def create_longest_palindrome_finder_button(self):
-        btn = tk.Button(self)
-        btn['text'] = 'Longest Palindrome Finder'
-        btn['command'] = lambda: LongestPalindromeFinder(
-            tk.Toplevel(master=self))
-        btn.pack()
-
-        return btn
 
 
 root = tk.Tk()

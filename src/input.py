@@ -12,6 +12,7 @@ class InputDialog(object):
         self.done_btn = self.create_done_button()
 
         self.data_file = None
+        self.data = None
 
     def create_input(self):
         input_txt = tk.Text(self.toplevel)
