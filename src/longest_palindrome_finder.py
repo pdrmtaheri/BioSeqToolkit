@@ -1,5 +1,7 @@
 import tkinter as tk
 
+from suffix_tree import Tree
+
 from src.input import InputDialog
 
 
@@ -22,4 +24,5 @@ class LongestPalindromeFinder(tk.Frame):
         self.sequence = InputDialog(master=self).show()
 
     def run(self):
-        pass
+        tree = Tree({1: self.sequence, 2: reversed(self.sequence)})
+        print(str(tree.common_substrings()[0][2]).replace(" ", ""))
