@@ -7,34 +7,19 @@ class InputDialog(object):
     def __init__(self, master):
         self.toplevel = tk.Toplevel(master)
 
-        self.input_txt = self.create_input()
-        self.browse_btn = self.create_browse_button()
-        self.done_btn = self.create_done_button()
+        self.input_txt = tk.Text(master=self.toplevel)
+        self.input_txt.pack()
+
+        self.browse_btn = tk.Button(
+            master=self.toplevel, text='Choose File', command=self.open_choose_file_dialog)
+        self.browse_btn.pack()
+
+        self.done_btn = tk.Button(
+            master=self.toplevel, text='Done', command=self.done)
+        self.done_btn.pack()
 
         self.data_file = None
         self.data = None
-
-    def create_input(self):
-        input_txt = tk.Text(self.toplevel)
-        input_txt.pack(side='top')
-
-        return input_txt
-
-    def create_browse_button(self):
-        browse_btn = tk.Button(self.toplevel)
-        browse_btn['text'] = 'Choose File'
-        browse_btn['command'] = self.open_choose_file_dialog
-        browse_btn.pack(side='top')
-
-        return browse_btn
-
-    def create_done_button(self):
-        done_btn = tk.Button(self.toplevel)
-        done_btn['text'] = 'Done'
-        done_btn['command'] = self.done
-        done_btn.pack(side='top')
-
-        return done_btn
 
     def done(self):
         if self.data_file is not None:
