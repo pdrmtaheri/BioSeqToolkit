@@ -1,21 +1,23 @@
 import tkinter as tk
 
-from src.commons import InputDialog
+from src.pattern_finder import PatternFinder
 
 
 class Application(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
-        self.master = master
+
+        self.create_pattern_finder_button()
+
         self.pack()
 
-        self.pattern_finder = tk.Button(self)
-        self.pattern_finder['text'] = 'Pattern Finder'
-        self.pattern_finder['command'] = self.create_pattern_finder_window
-        self.pattern_finder.pack(side='top')
+    def create_pattern_finder_button(self):
+        btn = tk.Button(self)
+        btn['text'] = 'Pattern Finder'
+        btn['command'] = lambda: PatternFinder(tk.Toplevel(master=self))
+        btn.pack()
 
-    def create_pattern_finder_window(self):
-        print(InputDialog(master=self).show())
+        return btn
 
 
 root = tk.Tk()
