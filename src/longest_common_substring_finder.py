@@ -3,23 +3,15 @@ import tkinter as tk
 from src.commons import InputDialog
 
 
-class PatternFinder(tk.Frame):
+class LongestCommonSubstringFinder(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master=master)
 
-        self.pattern_btn = self.create_pattern_load_button()
         self.sequence_btn = self.create_sequences_load_button()
+        self.k_entry = self.create_k_entry()
         self.run_btn = self.create_run_button()
 
         self.pack()
-
-    def create_pattern_load_button(self):
-        btn = tk.Button(master=self)
-        btn['text'] = 'Load Pattern'
-        btn['command'] = self.load_pattern
-        btn.pack()
-
-        return btn
 
     def create_sequences_load_button(self):
         btn = tk.Button(master=self)
@@ -28,7 +20,13 @@ class PatternFinder(tk.Frame):
         btn.pack()
 
         return btn
+    
+    def create_k_entry(self):
+        entry = tk.Entry(master=self)
+        entry.pack()
 
+        return entry
+    
     def create_run_button(self):
         btn = tk.Button(master=self)
         btn['text'] = 'Run'
@@ -37,13 +35,9 @@ class PatternFinder(tk.Frame):
 
         return btn
 
-    def load_pattern(self):
-        dialog_result = InputDialog(master=self).show()
-        print(dialog_result)
-
     def load_sequences(self):
         dialog_result = InputDialog(master=self).show()
         print(dialog_result)
-
+    
     def run(self):
         pass

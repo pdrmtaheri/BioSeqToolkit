@@ -39,7 +39,7 @@ class InputDialog(object):
         if self.data_file is not None:
             self.data = self.data_file.read()
         else:
-            self.data = self.input_txt.get(1.0, 'end')
+            self.data = self.input_txt.get(1.0, tk.END)
 
         self.toplevel.destroy()
 
