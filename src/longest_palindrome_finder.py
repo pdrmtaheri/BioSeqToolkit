@@ -1,6 +1,10 @@
 import tkinter as tk
+from tkinter import filedialog, messagebox
+
+from suffix_tree import Tree
 
 from src.input import InputDialog
+from src.output import output
 
 
 class LongestPalindromeFinder(tk.Frame):
@@ -22,4 +26,6 @@ class LongestPalindromeFinder(tk.Frame):
         self.sequence = InputDialog(master=self).show()
 
     def run(self):
-        pass
+        tree = Tree({1: self.sequence, 2: reversed(self.sequence)})
+        result = str(tree.common_substrings()[0][2]).replace(' ', '')
+        output(result, 'longest_palindrome.txt')

@@ -1,6 +1,6 @@
 import os
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 
 
 class InputDialog(object):
@@ -34,7 +34,7 @@ class InputDialog(object):
         try:
             self.data_file = open(filename, 'r')
         except FileNotFoundError:
-            print('File not found')
+            messagebox.showwarning(title='Bad file', message='No files selected')
 
     def show(self):
         self.toplevel.deiconify()

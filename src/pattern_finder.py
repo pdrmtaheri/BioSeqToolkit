@@ -1,7 +1,10 @@
 import tkinter as tk
 
+from suffix_tree import Tree
+
 from src.input import InputDialog
 from src.utils import read_fastq
+from src.output import output
 
 
 class PatternFinder(tk.Frame):
@@ -25,10 +28,13 @@ class PatternFinder(tk.Frame):
         self.pattern = None
 
     def load_pattern(self):
-        self.pattern = InputDialog(master=self).show()
+        self.pattern = InputDialog(master=self).show().strip("\n")
 
     def load_sequences(self):
         self.sequences = read_fastq(InputDialog(master=self).show())
 
     def run(self):
-        pass
+        tree = Tree(dict(enumerate(self.sequences)))
+        result = '\n'.join([f'{idx} {path.start}' for idx, path in tree.find_all(self.pattern)])
+        output(result, 'patterns_found.txt')
+
