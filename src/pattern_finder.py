@@ -4,6 +4,7 @@ from suffix_tree import Tree
 
 from src.input import InputDialog
 from src.utils import read_fastq
+from src.output import output
 
 
 class PatternFinder(tk.Frame):
@@ -34,6 +35,6 @@ class PatternFinder(tk.Frame):
 
     def run(self):
         tree = Tree(dict(enumerate(self.sequences)))
-        print(self.sequences[-1][-1]=="\n")
-        for id, path in tree.find_all(self.pattern):
-            print(id, path.start)
+        result = '\n'.join([f'{idx} {path.start}' for idx, path in tree.find_all(self.pattern)])
+        output(result, 'patterns_found.txt')
+

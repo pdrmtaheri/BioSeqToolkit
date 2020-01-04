@@ -4,6 +4,7 @@ from tkinter import filedialog, messagebox
 from suffix_tree import Tree
 
 from src.input import InputDialog
+from src.output import output
 
 
 class LongestPalindromeFinder(tk.Frame):
@@ -27,12 +28,4 @@ class LongestPalindromeFinder(tk.Frame):
     def run(self):
         tree = Tree({1: self.sequence, 2: reversed(self.sequence)})
         result = str(tree.common_substrings()[0][2]).replace(' ', '')
-
-        save_dir = filedialog.askdirectory()
-        if not save_dir:
-            messagebox.showerror(title='Bad directory', message='No directory selected')
-            return
-
-        save_filename = 'longest_palindromes.txt'
-        with open(f'{save_dir}/{save_filename}', 'x') as out:
-            out.write(result)
+        output(result, 'longest_palindrome.txt')
