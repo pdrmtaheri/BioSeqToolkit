@@ -26,5 +26,8 @@ class LongestCommonSubstringFinder(tk.Frame):
     def load_sequences(self):
         self.sequences = read_fastq(InputDialog(master=self).show())
 
+    def load_k(self):
+        self.k = int(self.k_entry.get())
+
     def run(self):
-        pass
+        self.load_k()

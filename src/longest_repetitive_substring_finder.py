@@ -20,9 +20,13 @@ class LongestRepetitiveSubstringFinder(tk.Frame):
         self.pack()
 
         self.sequence = None
+        self.k = None
 
     def load_sequence(self):
         self.sequence = InputDialog(master=self).show()
 
+    def load_k(self):
+        self.k = int(self.k_entry.get())
+
     def run(self):
-        pass
+        self.load_k()
