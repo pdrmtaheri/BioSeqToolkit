@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 
 from src.input import InputDialog
 from src.utils import read_fastq
@@ -25,6 +26,14 @@ class LongestCommonSubstringFinder(tk.Frame):
 
     def load_sequences(self):
         self.sequences = read_fastq(InputDialog(master=self).show())
+    
+    def load_k(self):
+        try:
+            self.k = int(self.k_entry.get())
+        except ValueError:
+            messagebox.showerror(title='Bad input', message='Invalid input "k"')
 
     def run(self):
-        pass
+        self.load_k()
+        if not self.k or not self.sequences:
+            return
