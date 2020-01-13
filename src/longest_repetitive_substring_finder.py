@@ -1,5 +1,7 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox, filedialog
+
+import graphviz
 
 from src.input import InputDialog
 from src.output import output
@@ -20,10 +22,15 @@ class LongestRepetitiveSubstringFinder(tk.Frame):
         self.run_btn = tk.Button(master=self, text='Run', command=self.run)
         self.run_btn.pack()
 
+        self.export_btn = tk.Button(master=self, text='Export Tree', command=self.export_tree)
+        self.export_btn.pack()
+
         self.pack()
 
         self.sequence = None
         self.k = None
+
+        self.tree = None
 
     def load_sequence(self):
         self.sequence = InputDialog(master=self).show()
@@ -33,6 +40,9 @@ class LongestRepetitiveSubstringFinder(tk.Frame):
             self.k = int(self.k_entry.get())
         except ValueError:
             pass
+
+    def construct_tree(self):
+        self.tree = SuffixTree({1: self.sequence})
 
     def run(self):
         if not self.sequence:
@@ -44,6 +54,15 @@ class LongestRepetitiveSubstringFinder(tk.Frame):
             messagebox.showerror(title='Bad input', message='Invalid input "k"')
             return
 
-        tree = SuffixTree({1: self.sequence})
-        result = tree.longest_repetitive_substring(self.k)
+        if not self.tree:
+            self.construct_tree()
+
+        result = self.tree.longest_repetitive_substring(self.k)
         output(result, 'longest_repetitive_substring_found.txt')
+
+    def export_tree(self):
+        if not self.tree:
+            self.construct_tree()
+
+        filename = filedialog.asksaveasfilename(parent=self.master)
+        graphviz.Source(self.tree.to_dot()).render(filename=filename, format='pdf', view=True, cleanup=True)
