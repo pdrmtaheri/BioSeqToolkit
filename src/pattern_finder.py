@@ -3,8 +3,8 @@ import tkinter as tk
 from suffix_tree import Tree
 
 from src.input import InputDialog
-from src.utils import read_fastq
 from src.output import output
+from src.utils import read_fastq
 
 
 class PatternFinder(tk.Frame):
@@ -37,4 +37,3 @@ class PatternFinder(tk.Frame):
         tree = Tree(dict(enumerate(self.sequences)))
         result = '\n'.join([f'{idx} {path.start}' for idx, path in tree.find_all(self.pattern)])
         output(result, 'patterns_found.txt')
-

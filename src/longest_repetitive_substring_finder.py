@@ -3,7 +3,7 @@ from tkinter import messagebox
 
 from src.input import InputDialog
 from src.output import output
-from src.utils import SuffixTree
+from src.tree import SuffixTree
 
 
 class LongestRepetitiveSubstringFinder(tk.Frame):
@@ -32,8 +32,7 @@ class LongestRepetitiveSubstringFinder(tk.Frame):
         try:
             self.k = int(self.k_entry.get())
         except ValueError:
-            messagebox.showerror(
-                title='Bad input', message='Invalid input "k"')
+            messagebox.showerror(title='Bad input', message='Invalid input "k"')
 
     def run(self):
         self.load_k()
