@@ -46,4 +46,4 @@ class LongestRepetitiveSubstringFinder(tk.Frame):
 
         tree = SuffixTree({1: self.sequence})
         result = tree.longest_repetitive_substring(self.k)
-        output(result, 'longest_repetitive_substring.txt')
+        output(result, 'longest_repetitive_substring_found.txt')

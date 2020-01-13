@@ -43,5 +43,5 @@ class PatternFinder(tk.Frame):
             return
 
         tree = SuffixTree(dict(enumerate(self.sequences)))
-        result = tree.find_pattern(self.pattern)
+        result = '\n'.join([f'{idx} {path.start}' for idx, path in tree.find_all(self.pattern)])
         output(result, 'patterns_found.txt')

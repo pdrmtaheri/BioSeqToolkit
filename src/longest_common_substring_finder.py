@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import messagebox
 
 from src.input import InputDialog
+from src.output import output
+from src.tree import SuffixTree
 from src.utils import read_fastq
 
 
@@ -31,9 +33,18 @@ class LongestCommonSubstringFinder(tk.Frame):
         try:
             self.k = int(self.k_entry.get())
         except ValueError:
-            messagebox.showerror(title='Bad input', message='Invalid input "k"')
+            pass
 
     def run(self):
-        self.load_k()
-        if not self.k or not self.sequences:
+        if not self.sequences:
+            messagebox.showerror(title='Bad input', message='Invalid input sequences')
             return
+
+        self.load_k()
+        if not self.k:
+            messagebox.showerror(title='Bad input', message='Invalid input "k"')
+            return
+
+        tree = SuffixTree(dict(enumerate(self.sequences)))
+        result = tree.longest_common_substring(self.k)
+        output(result, 'longest_common_substring.txt')
