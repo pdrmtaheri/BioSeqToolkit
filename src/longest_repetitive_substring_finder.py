@@ -32,12 +32,18 @@ class LongestRepetitiveSubstringFinder(tk.Frame):
         try:
             self.k = int(self.k_entry.get())
         except ValueError:
-            messagebox.showerror(title='Bad input', message='Invalid input "k"')
+            pass
 
     def run(self):
+        if not self.sequence:
+            messagebox.showerror(title='Bad input', message='Invalid input sequence')
+            return
+
         self.load_k()
-        if not self.k or not self.sequence:
+        if not self.k:
+            messagebox.showerror(title='Bad input', message='Invalid input "k"')
             return
 
         tree = SuffixTree({1: self.sequence})
-        output(tree.longest_repetitive_substring(self.k), 'longest_repetitive_substring.txt')
+        result = tree.longest_repetitive_substring(self.k)
+        output(result, 'longest_repetitive_substring.txt')

@@ -17,6 +17,9 @@ class SuffixTree(suffix_tree.Tree):
 
         self.root.post_order(on_visit)
 
+    def find_pattern(self, pattern):
+        return '\n'.join([f'{idx} {path.start}' for idx, path in self.find_all(pattern)])
+
     def longest_repetitive_substring(self, k):
         if not self.leaf_counts:
             self.count_leaves()

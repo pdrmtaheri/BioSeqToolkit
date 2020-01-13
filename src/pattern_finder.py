@@ -1,9 +1,9 @@
 import tkinter as tk
-
-from suffix_tree import Tree
+from tkinter import messagebox
 
 from src.input import InputDialog
 from src.output import output
+from src.tree import SuffixTree
 from src.utils import read_fastq
 
 
@@ -34,6 +34,14 @@ class PatternFinder(tk.Frame):
         self.sequences = read_fastq(InputDialog(master=self).show())
 
     def run(self):
-        tree = Tree(dict(enumerate(self.sequences)))
-        result = '\n'.join([f'{idx} {path.start}' for idx, path in tree.find_all(self.pattern)])
+        if not self.sequences:
+            messagebox.showerror(title='Bad input', message='Invalid input sequences')
+            return
+
+        if not self.pattern:
+            messagebox.showerror(title='Bad input', message='Invalid input pattern')
+            return
+
+        tree = SuffixTree(dict(enumerate(self.sequences)))
+        result = tree.find_pattern(self.pattern)
         output(result, 'patterns_found.txt')
