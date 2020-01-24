@@ -47,6 +47,7 @@ class LongestRepetitiveSubstringFinder(tk.Frame):
     def choose_sequence_file(self):
         filename = filedialog.askopenfilename(parent=self)
         try:
+            self.sequence_text.delete(1.0, tk.END)
             self.sequence_text.insert(tk.END, open(filename, 'r').read())
         except FileNotFoundError:
             messagebox.showwarning(
@@ -77,8 +78,7 @@ class LongestRepetitiveSubstringFinder(tk.Frame):
                 title='Bad input', message='Invalid input "k"')
             return
 
-        if not self.tree:
-            self.construct_tree()
+        self.construct_tree()
 
         result = self.tree.longest_repetitive_substring(self.k)
         output(result, 'longest_repetitive_substring_found.txt')

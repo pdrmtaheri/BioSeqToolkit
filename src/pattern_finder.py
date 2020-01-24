@@ -48,6 +48,7 @@ class PatternFinder(tk.Frame):
     def choose_sequence_file(self):
         filename = filedialog.askopenfilename(parent=self)
         try:
+            self.sequence_text.delete(1.0, tk.END)
             self.sequence_text.insert(tk.END, open(filename, 'r').read())
         except FileNotFoundError:
             messagebox.showwarning(title='Bad file', message='No files selected')

@@ -43,6 +43,7 @@ class LongestPalindromeFinder(tk.Frame):
     def choose_sequence_file(self):
         filename = filedialog.askopenfilename(parent=self)
         try:
+            self.sequence_text.delete(1.0, tk.END)
             self.sequence_text.insert(tk.END, open(filename, 'r').read())
         except FileNotFoundError:
             messagebox.showwarning(
@@ -61,8 +62,7 @@ class LongestPalindromeFinder(tk.Frame):
                 title='Bad input', message='Invalid input sequence')
             return
 
-        if not self.tree:
-            self.construct_tree()
+        self.construct_tree()
 
         result = str(self.tree.common_substrings()[0][2]).replace(' ', '')
         output(result, 'longest_palindrome_found.txt')
