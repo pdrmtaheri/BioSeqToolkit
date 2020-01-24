@@ -32,7 +32,7 @@ class LongestRepetitiveSubstringFinder(tk.Frame):
         self.export_btn = tk.Button(
             master=buttons_frame, text='Export Tree', command=self.export_tree)
         self.export_btn.grid(row=0, column=0)
-        buttons_frame.grid(row=3, column=0, columnspan=2, sticky='e')
+        buttons_frame.grid(row=4, column=0, columnspan=2, sticky='e')
 
         for i in range(2):
             self.grid_columnconfigure(i, weight=1)
