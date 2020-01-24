@@ -81,5 +81,6 @@ class Application(tk.Frame):
 
 
 root = tk.Tk()
+root.resizable(False, False)
 app = Application(master=root)
 app.mainloop()
