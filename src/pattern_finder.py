@@ -13,7 +13,7 @@ class PatternFinder(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master=master)
 
-        tk.Label(self, text='Sequence:').grid(row=0, column=0, sticky=tk.W)
+        tk.Label(self, text='Sequence:').grid(row=0, column=0, sticky='w')
         self.sequence_text = tk.Text(self)
         self.sequence_text.grid(row=1, column=0, columnspan=2, sticky='nsew')
 

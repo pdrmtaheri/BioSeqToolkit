@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox, filedialog
+from tkinter import filedialog, messagebox
 
 import graphviz
 
@@ -12,28 +12,48 @@ class LongestRepetitiveSubstringFinder(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master=master)
 
-        self.sequence_btn = tk.Button(
-            master=self, text='Load Sequence', command=self.load_sequence)
-        self.sequence_btn.pack()
+        tk.Label(self, text='Sequence:').grid(row=0, column=0, sticky='w')
+        self.sequence_text = tk.Text(self)
+        self.sequence_text.grid(row=1, column=0, columnspan=2, sticky='nsew')
 
-        self.k_entry = tk.Entry(master=self)
-        self.k_entry.pack()
+        self.sequence_load_btn = tk.Button(
+            self, text='Choose file', command=self.choose_sequence_file)
+        self.sequence_load_btn.grid(row=2, column=1, sticky='e')
 
-        self.run_btn = tk.Button(master=self, text='Run', command=self.run)
-        self.run_btn.pack()
+        self.k_entry = tk.Entry(self)
+        self.k_entry.insert(tk.END, '0')
+        self.k_entry.grid(row=3, column=0, columnspan=2, sticky='ew')
 
-        self.export_btn = tk.Button(master=self, text='Export Tree', command=self.export_tree)
-        self.export_btn.pack()
+        buttons_frame = tk.Frame(self)
+        self.run_btn = tk.Button(master=buttons_frame,
+                                 text='Run', command=self.run)
+        self.run_btn.grid(row=0, column=1)
 
-        self.pack()
+        self.export_btn = tk.Button(
+            master=buttons_frame, text='Export Tree', command=self.export_tree)
+        self.export_btn.grid(row=0, column=0)
+        buttons_frame.grid(row=3, column=0, columnspan=2, sticky='e')
 
+        for i in range(2):
+            self.grid_columnconfigure(i, weight=1)
+
+        for i in range(4):
+            self.grid_rowconfigure(i, weight=1)
         self.sequence = None
         self.k = None
 
         self.tree = None
 
+    def choose_sequence_file(self):
+        filename = filedialog.askopenfilename(parent=self)
+        try:
+            self.sequence_text.insert(tk.END, open(filename, 'r').read())
+        except FileNotFoundError:
+            messagebox.showwarning(
+                title='Bad file', message='No files selected')
+
     def load_sequence(self):
-        self.sequence = InputDialog(master=self).show()
+        self.sequence = self.sequence_text.get(1.0, tk.END)
 
     def load_k(self):
         try:
@@ -45,13 +65,16 @@ class LongestRepetitiveSubstringFinder(tk.Frame):
         self.tree = SuffixTree({1: self.sequence})
 
     def run(self):
+        self.load_sequence()
         if not self.sequence:
-            messagebox.showerror(title='Bad input', message='Invalid input sequence')
+            messagebox.showerror(
+                title='Bad input', message='Invalid input sequence')
             return
 
         self.load_k()
         if not self.k:
-            messagebox.showerror(title='Bad input', message='Invalid input "k"')
+            messagebox.showerror(
+                title='Bad input', message='Invalid input "k"')
             return
 
         if not self.tree:
@@ -65,4 +88,5 @@ class LongestRepetitiveSubstringFinder(tk.Frame):
             self.construct_tree()
 
         filename = filedialog.asksaveasfilename(parent=self.master)
-        graphviz.Source(self.tree.to_dot()).render(filename=filename, format='pdf', view=True, cleanup=True)
+        graphviz.Source(self.tree.to_dot()).render(
+            filename=filename, format='pdf', view=True, cleanup=True)
