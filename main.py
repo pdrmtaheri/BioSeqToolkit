@@ -30,6 +30,11 @@ class Application(tk.Frame):
         self.active_frame = tk.Frame()
         self.active_frame.grid(row=0, column=1, rowspan=4, sticky='nsew')
 
+        self.pf = PatternFinder(self)
+        self.lrsf = LongestRepetitiveSubstringFinder(self)
+        self.lcsf = LongestCommonSubstringFinder(self)
+        self.lpf = LongestPalindromeFinder(self)
+
         for i in range(2):
             self.grid_columnconfigure(i, weight=1)
 
@@ -51,32 +56,32 @@ class Application(tk.Frame):
         self._activate_buttons()
         self.pf_btn.configure(state='disabled')
 
-        self.active_frame.destroy()
-        self.active_frame = PatternFinder(self)
+        self.active_frame.grid_remove()
+        self.active_frame = self.pf
         self.active_frame.grid(row=0, column=1, rowspan=4, sticky='nsew')
 
     def toggle_lrsf(self):
         self._activate_buttons()
         self.lrsf_btn.configure(state='disabled')
 
-        self.active_frame.destroy()
-        self.active_frame = LongestRepetitiveSubstringFinder(self)
+        self.active_frame.grid_remove()
+        self.active_frame = self.lrsf
         self.active_frame.grid(row=0, column=1, rowspan=4, sticky='nsew')
 
     def toggle_lcsf(self):
         self._activate_buttons()
         self.lcsf_btn.configure(state='disabled')
 
-        self.active_frame.destroy()
-        self.active_frame = LongestCommonSubstringFinder(self)
+        self.active_frame.grid_remove()
+        self.active_frame = self.lcsf
         self.active_frame.grid(row=0, column=1, rowspan=4, sticky='nsew')
 
     def toggle_lpf(self):
         self._activate_buttons()
         self.lpf_btn.configure(state='disabled')
 
-        self.active_frame.destroy()
-        self.active_frame = LongestPalindromeFinder(self)
+        self.active_frame.grid_remove()
+        self.active_frame = self.lpf
         self.active_frame.grid(row=0, column=1, rowspan=4, sticky='nsew')
 
 
