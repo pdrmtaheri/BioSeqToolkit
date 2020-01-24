@@ -36,7 +36,10 @@ class Application(tk.Frame):
         for i in range(4):
             self.grid_rowconfigure(i, weight=1)
 
-        self.pack(expand=True, fill=tk.BOTH)
+        tk.Grid.columnconfigure(master, 0, weight=1)
+        tk.Grid.rowconfigure(master, 0, weight=1)
+
+        self.grid(column=0, row=0, sticky='nsew')
 
     def _activate_buttons(self):
         self.pf_btn.configure(state='normal')
