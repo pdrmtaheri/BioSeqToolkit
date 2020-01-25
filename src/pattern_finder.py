@@ -13,54 +13,79 @@ class PatternFinder(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master=master)
 
-        self.pattern_btn = tk.Button(
-            master=self, text='Load Pattern', command=self.load_pattern)
-        self.pattern_btn.pack()
+        tk.Label(self, text='Sequence').grid(row=0, column=0, sticky='w')
+        self.sequence_text = tk.Text(self)
+        self.sequence_text.grid(row=1, column=0, columnspan=2, sticky='nsew')
 
-        self.sequence_btn = tk.Button(
-            master=self, text='Load Sequences', command=self.load_sequences)
-        self.sequence_btn.pack()
+        self.sequence_load_btn = tk.Button(
+            self, text='Choose file', command=self.choose_sequence_file)
+        self.sequence_load_btn.grid(row=2, column=1, sticky='e')
 
-        self.run_btn = tk.Button(master=self, text='Run', command=self.run)
-        self.run_btn.pack()
+        tk.Label(self, text='Pattern').grid(row=3, column=0, sticky='w')
+        self.pattern_entry = tk.Entry(self)
+        self.pattern_entry.grid(row=4, column=0, columnspan=2, sticky='ew')
 
-        self.export_btn = tk.Button(master=self, text='Export Tree', command=self.export_tree)
-        self.export_btn.pack()
+        buttons_frame = tk.Frame(self)
+        self.run_btn = tk.Button(master=buttons_frame,
+                                 text='Run', command=self.run)
+        self.run_btn.grid(row=0, column=1)
 
-        self.pack()
+        self.export_btn = tk.Button(
+            master=buttons_frame, text='Export Tree', command=self.export_tree)
+        self.export_btn.grid(row=0, column=0)
+        buttons_frame.grid(row=5, column=0, columnspan=2, sticky='e')
+
+        for i in range(2):
+            self.grid_columnconfigure(i, weight=1)
+
+        for i in range(5):
+            self.grid_rowconfigure(i, weight=1)
 
         self.sequences = None
         self.pattern = None
 
         self.tree = None
 
+    def choose_sequence_file(self):
+        filename = filedialog.askopenfilename(parent=self)
+        try:
+            self.sequence_text.delete(1.0, tk.END)
+            self.sequence_text.insert(tk.END, open(filename, 'r').read())
+        except FileNotFoundError:
+            messagebox.showwarning(
+                title='Bad file', message='No files selected')
+
     def load_pattern(self):
-        self.pattern = InputDialog(master=self).show().strip("\n")
+        self.pattern = self.pattern_entry.get()
 
     def load_sequences(self):
-        self.sequences = read_fastq(InputDialog(master=self).show())
+        self.sequences = read_fastq(self.sequence_text.get(1.0, tk.END))
 
     def construct_tree(self):
+        self.load_sequences()
+        if not self.sequences:
+            messagebox.showerror(
+                title='Bad input', message='Invalid input sequences')
+            return
+
         self.tree = SuffixTree(dict(enumerate(self.sequences)))
 
     def run(self):
-        if not self.sequences:
-            messagebox.showerror(title='Bad input', message='Invalid input sequences')
-            return
-
+        self.load_pattern()
         if not self.pattern:
-            messagebox.showerror(title='Bad input', message='Invalid input pattern')
+            messagebox.showerror(
+                title='Bad input', message='Invalid input pattern')
             return
 
-        if not self.tree:
-            self.construct_tree()
+        self.construct_tree()
 
-        result = '\n'.join([f'{idx} {path.start}' for idx, path in self.tree.find_all(self.pattern)])
+        result = '\n'.join(
+            [f'{idx} {path.start}' for idx, path in self.tree.find_all(self.pattern)])
         output(result, 'patterns_found.txt')
 
     def export_tree(self):
-        if not self.tree:
-            self.construct_tree()
+        self.construct_tree()
 
         filename = filedialog.asksaveasfilename(parent=self.master)
-        graphviz.Source(self.tree.to_dot()).render(filename=filename, format='pdf', view=True, cleanup=True)
+        graphviz.Source(self.tree.to_dot()).render(
+            filename=filename, format='pdf', view=True, cleanup=True)
