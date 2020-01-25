@@ -12,7 +12,7 @@ class LongestRepetitiveSubstringFinder(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master=master)
 
-        tk.Label(self, text='Sequence:').grid(row=0, column=0, sticky='w')
+        tk.Label(self, text='Sequence').grid(row=0, column=0, sticky='w')
         self.sequence_text = tk.Text(self)
         self.sequence_text.grid(row=1, column=0, columnspan=2, sticky='nsew')
 
@@ -20,9 +20,9 @@ class LongestRepetitiveSubstringFinder(tk.Frame):
             self, text='Choose file', command=self.choose_sequence_file)
         self.sequence_load_btn.grid(row=2, column=1, sticky='e')
 
+        tk.Label(self, text='Minimum number of repeats').grid(row=3, column=0, sticky='w')
         self.k_entry = tk.Entry(self)
-        self.k_entry.insert(tk.END, '0')
-        self.k_entry.grid(row=3, column=0, columnspan=2, sticky='ew')
+        self.k_entry.grid(row=4, column=0, columnspan=2, sticky='ew')
 
         buttons_frame = tk.Frame(self)
         self.run_btn = tk.Button(master=buttons_frame,
@@ -32,7 +32,7 @@ class LongestRepetitiveSubstringFinder(tk.Frame):
         self.export_btn = tk.Button(
             master=buttons_frame, text='Export Tree', command=self.export_tree)
         self.export_btn.grid(row=0, column=0)
-        buttons_frame.grid(row=4, column=0, columnspan=2, sticky='e')
+        buttons_frame.grid(row=5, column=0, columnspan=2, sticky='e')
 
         for i in range(2):
             self.grid_columnconfigure(i, weight=1)
