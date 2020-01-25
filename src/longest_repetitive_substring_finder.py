@@ -20,7 +20,8 @@ class LongestRepetitiveSubstringFinder(tk.Frame):
             self, text='Choose file', command=self.choose_sequence_file)
         self.sequence_load_btn.grid(row=2, column=1, sticky='e')
 
-        tk.Label(self, text='Minimum number of repeats').grid(row=3, column=0, sticky='w')
+        tk.Label(self, text='Minimum number of repeats').grid(
+            row=3, column=0, sticky='w')
         self.k_entry = tk.Entry(self)
         self.k_entry.grid(row=4, column=0, columnspan=2, sticky='ew')
 
@@ -63,15 +64,15 @@ class LongestRepetitiveSubstringFinder(tk.Frame):
             pass
 
     def construct_tree(self):
-        self.tree = SuffixTree({1: self.sequence})
-
-    def run(self):
         self.load_sequence()
         if not self.sequence:
             messagebox.showerror(
                 title='Bad input', message='Invalid input sequence')
             return
 
+        self.tree = SuffixTree({1: self.sequence})
+
+    def run(self):
         self.load_k()
         if not self.k:
             messagebox.showerror(

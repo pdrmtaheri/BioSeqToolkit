@@ -17,7 +17,8 @@ class PatternFinder(tk.Frame):
         self.sequence_text = tk.Text(self)
         self.sequence_text.grid(row=1, column=0, columnspan=2, sticky='nsew')
 
-        self.sequence_load_btn = tk.Button(self, text='Choose file', command=self.choose_sequence_file)
+        self.sequence_load_btn = tk.Button(
+            self, text='Choose file', command=self.choose_sequence_file)
         self.sequence_load_btn.grid(row=2, column=1, sticky='e')
 
         tk.Label(self, text='Pattern').grid(row=3, column=0, sticky='w')
@@ -51,7 +52,8 @@ class PatternFinder(tk.Frame):
             self.sequence_text.delete(1.0, tk.END)
             self.sequence_text.insert(tk.END, open(filename, 'r').read())
         except FileNotFoundError:
-            messagebox.showwarning(title='Bad file', message='No files selected')
+            messagebox.showwarning(
+                title='Bad file', message='No files selected')
 
     def load_pattern(self):
         self.pattern = self.pattern_entry.get()
@@ -60,15 +62,15 @@ class PatternFinder(tk.Frame):
         self.sequences = read_fastq(self.sequence_text.get(1.0, tk.END))
 
     def construct_tree(self):
-        self.tree = SuffixTree(dict(enumerate(self.sequences)))
-
-    def run(self):
         self.load_sequences()
         if not self.sequences:
             messagebox.showerror(
                 title='Bad input', message='Invalid input sequences')
             return
 
+        self.tree = SuffixTree(dict(enumerate(self.sequences)))
+
+    def run(self):
         self.load_pattern()
         if not self.pattern:
             messagebox.showerror(
@@ -82,8 +84,7 @@ class PatternFinder(tk.Frame):
         output(result, 'patterns_found.txt')
 
     def export_tree(self):
-        if not self.tree:
-            self.construct_tree()
+        self.construct_tree()
 
         filename = filedialog.asksaveasfilename(parent=self.master)
         graphviz.Source(self.tree.to_dot()).render(
