@@ -4,7 +4,6 @@ from tkinter import filedialog, messagebox
 import graphviz
 from suffix_tree import Tree
 
-from src.input import InputDialog
 from src.output import output
 
 
@@ -40,6 +39,8 @@ class LongestPalindromeFinder(tk.Frame):
 
         self.tree = None
 
+        self.initialized = False
+
     def choose_sequence_file(self):
         filename = filedialog.askopenfilename(parent=self)
         try:
@@ -50,26 +51,39 @@ class LongestPalindromeFinder(tk.Frame):
                 title='Bad file', message='No files selected')
 
     def load_sequence(self):
-        self.sequence = self.sequence_text.get(1.0, tk.END)
+        self.sequence = self.sequence_text.get(1.0, tk.END).strip("\n ")
 
     def construct_tree(self):
         self.tree = Tree({1: self.sequence, 2: reversed(self.sequence)})
 
-    def run(self):
+    def initialize(self):
         self.load_sequence()
         if not self.sequence:
             messagebox.showerror(
                 title='Bad input', message='Invalid input sequence')
             return
-
+        print(self.sequence)
         self.construct_tree()
+        self.initialized = True
 
-        result = str(self.tree.common_substrings()[0][2]).replace(' ', '')
+    def run(self):
+        if not self.initialized:
+            self.initialize()
+        result = str(self.find_the_longest_palindrome()).replace(' ', '')
         output(result, 'longest_palindrome_found.txt')
 
+    def find_the_longest_palindrome(self):
+        result = ''
+        candidate_node = None
+        for i in range(1, len(self.sequence) + 1):
+            node = self.tree.lca(self.tree.nodemap[1][i], self.tree.nodemap[2][len(self.sequence) - i])
+            if len(node) > len(result):
+                candidate_node = node
+        return candidate_node
+
     def export_tree(self):
-        if not self.tree:
-            self.construct_tree()
+        if not self.initialized:
+            self.initialize()
 
         filename = filedialog.asksaveasfilename(parent=self.master)
         graphviz.Source(self.tree.to_dot()).render(
