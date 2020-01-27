@@ -39,8 +39,6 @@ class LongestPalindromeFinder(tk.Frame):
 
         self.tree = None
 
-        self.initialized = False
-
     def choose_sequence_file(self):
         filename = filedialog.askopenfilename(parent=self)
         try:
@@ -62,29 +60,63 @@ class LongestPalindromeFinder(tk.Frame):
             messagebox.showerror(
                 title='Bad input', message='Invalid input sequence')
             return
-        print(self.sequence)
         self.construct_tree()
-        self.initialized = True
 
     def run(self):
-        if not self.initialized:
-            self.initialize()
+        self.initialize()
         result = str(self.find_the_longest_palindrome()).replace(' ', '')
         output(result, 'longest_palindrome_found.txt')
 
-    def find_the_longest_palindrome(self):
-        result = ''
+    def build_neighbor_leaves(self):
+        leaves = {}
+
+        def f(node):
+            if node.is_leaf():
+                leaves[(node.str_id, node.path.start)] = node
+
+        self.tree.root.post_order(f)
+        odd_neighbor_leaves = [(leaves[1, i], leaves[2, len(self.sequence) - 1 - i]) for i in range(len(self.sequence))]
+        even_neighbor_leaves = [(self.sequence[i], leaves[1, i + 1], leaves[2, len(self.sequence) + 1 - i]) for i in
+                                range(1, len(self.sequence) - 1) if self.sequence[i - 1] == self.sequence[i]]
+        # neighbor_leaves = [(leaves[i, 0], leaves[2, 0])]
+        return odd_neighbor_leaves, even_neighbor_leaves
+
+    def find_the_longest_odd_palindrome(self, neighbor_leaves):
         candidate_node = None
-        for i in range(1, len(self.sequence) + 1):
-            node = self.tree.lca(self.tree.nodemap[1][i], self.tree.nodemap[2][len(self.sequence) - i])
-            if len(node) > len(result):
+        for node1, node2 in neighbor_leaves:
+            node = self.tree.lca(node1, node2)
+            if candidate_node is None or len(node) > len(candidate_node):
                 candidate_node = node
-        return candidate_node
+        result = str(candidate_node).replace(' ', '')
+        result = (result[::-1])[:-1] + result
+        return result
+
+    def find_the_longest_even_palindrome(self, neighbor_leaves):
+        if not neighbor_leaves:
+            return ''
+        candidate_node = None
+        middle = None
+        for mid, node1, node2 in neighbor_leaves:
+            node = self.tree.lca(node1, node2)
+            if candidate_node is None or len(node) > len(candidate_node):
+                candidate_node = node
+                middle = mid
+        if candidate_node == self.tree.root:
+            candidate_node = ''
+        result = str(candidate_node).replace(' ', '')
+        result = result[::-1] + (middle * 2) + result
+        return result
+
+    def find_the_longest_palindrome(self):
+        odd_neighbor_leaves, even_neighbor_leaves = self.build_neighbor_leaves()
+        self.tree.prepare_lca()
+        odd_palindrome = self.find_the_longest_odd_palindrome(odd_neighbor_leaves)
+        even_palindrome = self.find_the_longest_even_palindrome(even_neighbor_leaves)
+
+        return max(odd_palindrome, even_palindrome, key=len)
 
     def export_tree(self):
-        if not self.initialized:
-            self.initialize()
-
+        self.initialize()
         filename = filedialog.asksaveasfilename(parent=self.master)
         graphviz.Source(self.tree.to_dot()).render(
             filename=filename, format='pdf', view=True, cleanup=True)
