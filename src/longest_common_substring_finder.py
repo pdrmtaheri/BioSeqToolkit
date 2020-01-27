@@ -13,7 +13,7 @@ class LongestCommonSubstringFinder(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master=master)
 
-        tk.Label(self, text='Sequence:').grid(row=0, column=0, sticky='w')
+        tk.Label(self, text='Sequences').grid(row=0, column=0, sticky='w')
         self.sequence_text = tk.Text(self)
         self.sequence_text.grid(row=1, column=0, columnspan=2, sticky='nsew')
 
@@ -21,22 +21,20 @@ class LongestCommonSubstringFinder(tk.Frame):
             self, text='Choose file', command=self.choose_sequence_file)
         self.sequence_load_btn.grid(row=2, column=1, sticky='e')
 
+        tk.Label(self, text='Minimum number of strings containing the substring').grid(
+            row=3, column=0, sticky='w')
         self.k_entry = tk.Entry(self)
-        self.k_entry.insert(tk.END, '')
-        self.k_entry.grid(row=15, column=0, columnspan=2, sticky='ew')
-        labelText = tk.StringVar()
-        labelText.set("Minimum Number of Strings Repeated in:")
-        labelDir = tk.Label(self, textvariable=labelText).grid(row=5, column=0, sticky='w')
+        self.k_entry.grid(row=4, column=0, columnspan=2, sticky='ew')
 
         buttons_frame = tk.Frame(self)
         self.run_btn = tk.Button(master=buttons_frame,
                                  text='Run', command=self.run)
-        self.run_btn.grid(row=100, column=1)
+        self.run_btn.grid(row=0, column=1)
 
         self.export_btn = tk.Button(
             master=buttons_frame, text='Export Tree', command=self.export_tree)
-        self.export_btn.grid(row=100, column=0)
-        buttons_frame.grid(row=100, column=0, columnspan=2, sticky='e')
+        self.export_btn.grid(row=0, column=0)
+        buttons_frame.grid(row=5, column=0, columnspan=2, sticky='e')
 
         for i in range(2):
             self.grid_columnconfigure(i, weight=1)
@@ -68,15 +66,15 @@ class LongestCommonSubstringFinder(tk.Frame):
             pass
 
     def construct_tree(self):
-        self.tree = SuffixTree(dict(enumerate(self.sequences)))
-
-    def run(self):
         self.load_sequences()
         if not self.sequences:
             messagebox.showerror(
                 title='Bad input', message='Invalid input sequences')
             return
 
+        self.tree = SuffixTree(dict(enumerate(self.sequences)))
+
+    def run(self):
         self.load_k()
         if not self.k:
             messagebox.showerror(
@@ -89,8 +87,7 @@ class LongestCommonSubstringFinder(tk.Frame):
         output(result, 'longest_common_substring.txt')
 
     def export_tree(self):
-        if not self.tree:
-            self.construct_tree()
+        self.construct_tree()
 
         filename = filedialog.asksaveasfilename(parent=self.master)
         graphviz.Source(self.tree.to_dot()).render(
